@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluxo de Caixa do Dia — Ramos Duarte</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f8f6;
+      color: #1a1a1a;
+      padding: 24px 20px;
+      min-height: 100vh;
+    }
+    .header {
+      margin-bottom: 24px;
+    }
+    .header-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+    .campos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .campo { display: flex; flex-direction: column; gap: 5px; }
+    .campo label { font-size: 12px; color: #666; }
+    .campo input {
+      padding: 9px 12px;
+      font-size: 14px;
+      border: 1px solid #e0e0db;
+      border-radius: 8px;
+      background: #fff;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .campo input:focus { border-color: #999; }
+    .divider { border: none; border-top: 1px solid #ebebeb; margin: 20px 0; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #ebebeb;
+      padding: 14px 16px;
+    }
+    .card-label { font-size: 11px; color: #888; margin-bottom: 6px; }
+    .card-valor { font-size: 16px; font-weight: 500; color: #1a1a1a; }
+    .card-valor.positivo { color: #3B6D11; }
+    .card-valor.negativo { color: #A32D2D; }
+    .saldo-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #ebebeb;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .saldo-label { font-size: 13px; color: #888; margin-bottom: 4px; }
+    .saldo-valor { font-size: 32px; font-weight: 500; }
+    .saldo-valor.positivo { color: #3B6D11; }
+    .saldo-valor.negativo { color: #A32D2D; }
+    .saldo-valor.zerado { color: #888; }
+    .badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+    .badge.positivo { background: #EAF3DE; color: #27500A; }
+    .badge.negativo { background: #FCEBEB; color: #791F1F; }
+    .badge.zerado { background: #f0f0ee; color: #666; }
+    .chart-section { background: #fff; border-radius: 12px; border: 1px solid #ebebeb; padding: 20px; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #666;
+    }
+    .legend span { display: flex; align-items: center; gap: 6px; }
+    .legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .chart-wrap { position: relative; width: 100%; height: 260px; }
+    @media (max-width: 480px) {
+      .saldo-valor { font-size: 24px; }
+      .chart-wrap { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-label">Ramos Duarte Transportes</div>
+    <h1>Fluxo de Caixa do Dia</h1>
+  </div>
+
+  <div class="section-title">Valores do sistema — DATAMEX</div>
+  <div class="campos-grid">
+    <div class="campo">
+      <label>Saldo em conta (R$)</label>
+      <input type="number" id="saldo" value="0" step="100" min="0">
+    </div>
+    <div class="campo">
+      <label>Entradas programadas (R$)</label>
+      <input type="number" id="ent-sistema" value="0" step="100" min="0">
+    </div>
+    <div class="campo">
+      <label>Saídas programadas (R$)</label>
+      <input type="number" id="sai-sistema" value="0" step="100" min="0">
+    </div>
+  </div>
+
+  <div class="section-title">Previsões extras — Emilly</div>
+  <div class="campos-grid">
+    <div class="campo">
+      <label>Entradas extras prováveis (R$)</label>
+      <input type="number" id="ent-extra" value="0" step="100" min="0">
+    </div>
+    <div class="campo">
+      <label>Saídas extras prováveis (R$)</label>
+      <input type="number" id="sai-extra" value="0" step="100" min="0">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Total entradas</div>
+      <div class="card-valor" id="c-entradas">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total saídas</div>
+      <div class="card-valor" id="c-saidas">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Programado líquido</div>
+      <div class="card-valor" id="c-programado">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Impacto das previsões</div>
+      <div class="card-valor" id="c-impacto">R$ 0,00</div>
+    </div>
+  </div>
+
+  <div class="saldo-card">
+    <div>
+      <div class="saldo-label">Fechamento estimado do dia</div>
+      <div class="saldo-valor zerado" id="saldo-final">R$ 0,00</div>
+    </div>
+    <div class="badge zerado" id="saldo-badge">Aguardando dados</div>
+  </div>
+
+  <div class="chart-section">
+    <div class="legend">
+      <span><span class="legend-sq" style="background:#378ADD;"></span>Entradas</span>
+      <span><span class="legend-sq" style="background:#E24B4A;"></span>Saídas</span>
+      <span><span class="legend-sq" style="background:#639922;"></span>Fechamento positivo</span>
+      <span><span class="legend-sq" style="background:#E24B4A; opacity:0.6;"></span>Fechamento negativo</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="grafico" role="img" aria-label="Gráfico de barras: entradas, saídas e fechamento do dia em reais.">Gráfico de fluxo de caixa do dia.</canvas>
+    </div>
+  </div>
+
+  <script>
+    const fmt = v => 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtSigned = v => (v < 0 ? '-' : '') + 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    let chart;
+
+    function calcular() {
+      const saldo    = parseFloat(document.getElementById('saldo').value)      || 0;
+      const entSis   = parseFloat(document.getElementById('ent-sistema').value) || 0;
+      const saiSis   = parseFloat(document.getElementById('sai-sistema').value) || 0;
+      const entExtra = parseFloat(document.getElementById('ent-extra').value)   || 0;
+      const saiExtra = parseFloat(document.getElementById('sai-extra').value)   || 0;
+
+      const totalEntradas  = entSis + entExtra;
+      const totalSaidas    = saiSis + saiExtra;
+      const programadoLiq  = saldo + entSis - saiSis;
+      const impacto        = entExtra - saiExtra;
+      const fechamento     = saldo + totalEntradas - totalSaidas;
+
+      document.getElementById('c-entradas').textContent = fmt(totalEntradas);
+      document.getElementById('c-saidas').textContent   = fmt(totalSaidas);
+
+      const elProg = document.getElementById('c-programado');
+      elProg.textContent = fmtSigned(programadoLiq);
+      elProg.className = 'card-valor ' + (programadoLiq >= 0 ? 'positivo' : 'negativo');
+
+      const elImp = document.getElementById('c-impacto');
+      elImp.textContent = fmtSigned(impacto);
+      elImp.className = 'card-valor ' + (impacto >= 0 ? 'positivo' : 'negativo');
+
+      const elFinal = document.getElementById('saldo-final');
+      elFinal.textContent = fmtSigned(fechamento);
+      elFinal.className = 'saldo-valor ' + (fechamento > 0 ? 'positivo' : fechamento < 0 ? 'negativo' : 'zerado');
+
+      const badge = document.getElementById('saldo-badge');
+      if (fechamento > 0)      { badge.textContent = 'Positivo'; badge.className = 'badge positivo'; }
+      else if (fechamento < 0) { badge.textContent = 'Negativo'; badge.className = 'badge negativo'; }
+      else                     { badge.textContent = 'Zerado';   badge.className = 'badge zerado'; }
+
+      const corFechamento = fechamento >= 0 ? '#639922' : '#E24B4A';
+      const dados = [totalEntradas, totalSaidas, fechamento];
+      const cores = ['#378ADD', '#E24B4A', corFechamento];
+
+      if (chart) {
+        chart.data.datasets[0].data = dados;
+        chart.data.datasets[0].backgroundColor = cores;
+        chart.update();
+      } else {
+        chart = new Chart(document.getElementById('grafico'), {
+          type: 'bar',
+          data: {
+            labels: ['Entradas', 'Saídas', 'Fechamento'],
+            datasets: [{
+              data: dados,
+              backgroundColor: cores,
+              borderRadius: 6,
+              borderSkipped: false
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: { label: ctx => fmtSigned(ctx.parsed.y) }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { autoSkip: false, color: '#888', font: { size: 12 } },
+                grid: { display: false },
+                border: { display: false }
+              },
+              y: {
+                ticks: { callback: v => fmtSigned(v), color: '#888', font: { size: 11 } },
+                grid: { color: 'rgba(0,0,0,0.05)' },
+                border: { display: false }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    document.querySelectorAll('input').forEach(el => el.addEventListener('input', calcular));
+    calcular();
+  </script>
+</body>
+</html>
