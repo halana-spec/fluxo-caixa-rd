@@ -9,8 +9,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f8f8f6;
-      color: #1a1a1a;
+      background: #0f0f0f;
+      color: #e8e8e8;
       padding: 24px 20px;
       min-height: 100vh;
     }
@@ -22,20 +22,20 @@
       font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #888;
+      color: #555;
       margin-bottom: 4px;
     }
     .header h1 {
       font-size: 20px;
       font-weight: 500;
-      color: #1a1a1a;
+      color: #e8e8e8;
     }
     .section-title {
       font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.07em;
       text-transform: uppercase;
-      color: #aaa;
+      color: #555;
       margin-bottom: 10px;
     }
     .campos-grid {
@@ -49,15 +49,15 @@
     .campo input {
       padding: 9px 12px;
       font-size: 14px;
-      border: 1px solid #e0e0db;
+      border: 1px solid #2a2a2a;
       border-radius: 8px;
-      background: #fff;
-      color: #1a1a1a;
+      background: #1a1a1a;
+      color: #e8e8e8;
       outline: none;
       transition: border-color 0.15s;
     }
-    .campo input:focus { border-color: #999; }
-    .divider { border: none; border-top: 1px solid #ebebeb; margin: 20px 0; }
+    .campo input:focus { border-color: #444; }
+    .divider { border: none; border-top: 1px solid #1e1e1e; margin: 20px 0; }
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -65,19 +65,19 @@
       margin-bottom: 20px;
     }
     .card {
-      background: #fff;
+      background: #1a1a1a;
       border-radius: 10px;
-      border: 1px solid #ebebeb;
+      border: 1px solid #2a2a2a;
       padding: 14px 16px;
     }
-    .card-label { font-size: 11px; color: #888; margin-bottom: 6px; }
-    .card-valor { font-size: 16px; font-weight: 500; color: #1a1a1a; }
-    .card-valor.positivo { color: #3B6D11; }
-    .card-valor.negativo { color: #A32D2D; }
+    .card-label { font-size: 11px; color: #555; margin-bottom: 6px; }
+    .card-valor { font-size: 16px; font-weight: 500; color: #e8e8e8; }
+    .card-valor.positivo { color: #7ec850; }
+    .card-valor.negativo { color: #e05a5a; }
     .saldo-card {
-      background: #fff;
+      background: #1a1a1a;
       border-radius: 12px;
-      border: 1px solid #ebebeb;
+      border: 1px solid #2a2a2a;
       padding: 20px 24px;
       margin-bottom: 24px;
       display: flex;
@@ -86,28 +86,28 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .saldo-label { font-size: 13px; color: #888; margin-bottom: 4px; }
+    .saldo-label { font-size: 13px; color: #555; margin-bottom: 4px; }
     .saldo-valor { font-size: 32px; font-weight: 500; }
-    .saldo-valor.positivo { color: #3B6D11; }
-    .saldo-valor.negativo { color: #A32D2D; }
-    .saldo-valor.zerado { color: #888; }
+    .saldo-valor.positivo { color: #7ec850; }
+    .saldo-valor.negativo { color: #e05a5a; }
+    .saldo-valor.zerado { color: #555; }
     .badge {
       font-size: 12px;
       font-weight: 500;
       padding: 6px 14px;
       border-radius: 20px;
     }
-    .badge.positivo { background: #EAF3DE; color: #27500A; }
-    .badge.negativo { background: #FCEBEB; color: #791F1F; }
-    .badge.zerado { background: #f0f0ee; color: #666; }
-    .chart-section { background: #fff; border-radius: 12px; border: 1px solid #ebebeb; padding: 20px; }
+    .badge.positivo { background: #1a2e10; color: #7ec850; }
+    .badge.negativo { background: #2e1010; color: #e05a5a; }
+    .badge.zerado { background: #222; color: #555; }
+    .chart-section { background: #1a1a1a; border-radius: 12px; border: 1px solid #2a2a2a; padding: 20px; }
     .legend {
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
       margin-bottom: 16px;
       font-size: 12px;
-      color: #666;
+      color: #555;
     }
     .legend span { display: flex; align-items: center; gap: 6px; }
     .legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
@@ -185,9 +185,9 @@
   <div class="chart-section">
     <div class="legend">
       <span><span class="legend-sq" style="background:#378ADD;"></span>Entradas</span>
-      <span><span class="legend-sq" style="background:#E24B4A;"></span>Saídas</span>
-      <span><span class="legend-sq" style="background:#639922;"></span>Fechamento positivo</span>
-      <span><span class="legend-sq" style="background:#E24B4A; opacity:0.6;"></span>Fechamento negativo</span>
+      <span><span class="legend-sq" style="background:#e05a5a;"></span>Saídas</span>
+      <span><span class="legend-sq" style="background:#7ec850;"></span>Fechamento positivo</span>
+      <span><span class="legend-sq" style="background:#e05a5a; opacity:0.6;"></span>Fechamento negativo</span>
     </div>
     <div class="chart-wrap">
       <canvas id="grafico" role="img" aria-label="Gráfico de barras: entradas, saídas e fechamento do dia em reais.">Gráfico de fluxo de caixa do dia.</canvas>
@@ -233,9 +233,9 @@
       else if (fechamento < 0) { badge.textContent = 'Negativo'; badge.className = 'badge negativo'; }
       else                     { badge.textContent = 'Zerado';   badge.className = 'badge zerado'; }
 
-      const corFechamento = fechamento >= 0 ? '#639922' : '#E24B4A';
+      const corFechamento = fechamento >= 0 ? '#7ec850' : '#e05a5a';
       const dados = [totalEntradas, totalSaidas, fechamento];
-      const cores = ['#378ADD', '#E24B4A', corFechamento];
+      const cores = ['#378ADD', '#e05a5a', corFechamento];
 
       if (chart) {
         chart.data.datasets[0].data = dados;
@@ -264,13 +264,13 @@
             },
             scales: {
               x: {
-                ticks: { autoSkip: false, color: '#888', font: { size: 12 } },
+                ticks: { autoSkip: false, color: '#555', font: { size: 12 } },
                 grid: { display: false },
                 border: { display: false }
               },
               y: {
-                ticks: { callback: v => fmtSigned(v), color: '#888', font: { size: 11 } },
-                grid: { color: 'rgba(0,0,0,0.05)' },
+                ticks: { callback: v => fmtSigned(v), color: '#555', font: { size: 11 } },
+                grid: { color: 'rgba(255,255,255,0.05)' },
                 border: { display: false }
               }
             }
